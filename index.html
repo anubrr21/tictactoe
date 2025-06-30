@@ -9,22 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <meta property="og:description" content="Play Tic Tac Toe online with modern animations and score tracking. Free, no ads!">
-<meta name="twitter:description" content="The classic XO game reimagined - play now!">
+    <meta name="twitter:description" content="The classic XO game reimagined - play now!">
     <meta name="google-site-verification" content="Rl0RnOukrFRMI9BP42aDKH46exfH4QSZwv98xF38ZKE" />
     <meta name="google-site-verification" content="Rl0RnOukrFRMI9BP42aDKH46exfH4QSZwv98xF38ZKE" />
     <!-- Favicon Basic -->
-<link rel="icon" href="logo.png" type="image/x-icon">
-<link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
 
-<!-- Modern Browsers -->
-<link rel="icon" type="image/png" sizes="32x32" href="logo-32x32.png">
+    <!-- Modern Browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="logo-32x32.png">
 
-<!-- Apple Devices -->
-<link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+    <!-- Apple Devices -->
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
 
-<!-- Android Chrome -->
-<link rel="manifest" href="site.webmanifest">
-<meta name="theme-color" content="#7c3aed"> <!-- Match your theme color -->
+    <!-- Android Chrome -->
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#7c3aed"> <!-- Match your theme color -->
   </head>
   <body class="dark-mode">
     <button id="theme-toggle" class="theme-btn">☀️ Light Mode</button>
@@ -32,22 +32,29 @@
     <div class="player-input animate__animated animate__fadeIn">
       <h1>Tic Tac Toe</h1>
       <p class="tagline">The ultimate online battle of X's and O's!<br> 
-Play free with friends or challenge our AI.</p>
+      Play free with friends or challenge our AI.</p>
       <div class="input-group">
         <input type="text" id="playerX" placeholder="Player X Name">
         <input type="text" id="playerO" placeholder="Player O Name">
+      </div>
+      <div class="mode-selection">
+        <button id="pvp-btn" class="mode-btn active">Player vs Player</button>
+        <button id="pvc-btn" class="mode-btn">Player vs Computer</button>
       </div>
       <button id="start-btn" class="animate__animated animate__pulse animate__infinite">Start Game</button>
     </div>
 
     <div class="game-container hide">
-      <div class="scoreboard">
-        <div class="player-x-score">
-          <span id="playerX-name">Player X</span>: <span class="score">0</span>
+      <div class="game-header">
+        <div class="scoreboard">
+          <div class="player-x-score">
+            <span id="playerX-name">Player X</span>: <span class="score">0</span>
+          </div>
+          <div class="player-o-score">
+            <span id="playerO-name">Player O</span>: <span class="score">0</span>
+          </div>
         </div>
-        <div class="player-o-score">
-          <span id="playerO-name">Player O</span>: <span class="score">0</span>
-        </div>
+        <button id="end-game-btn" class="end-game-btn">End Game</button>
       </div>
       
       <div class="msg-container hide">
@@ -83,11 +90,11 @@ Play free with friends or challenge our AI.</p>
 
     <audio id="win-sound" src="audio/win.wav" preload="auto"></audio>
     <audio id="draw-sound" src="audio/draw.wav" preload="auto"></audio>
-<audio id="click-sound" src="audio/click.wav" preload="auto"></audio>
+    <audio id="click-sound" src="audio/click.wav" preload="auto"></audio>
     
     <footer>
-             Made with &#x2665; by <a href="https://www.instagram.com/anubrr_21/" id="joking" target=_blank > Anubrata.</a>
-        </footer>
+      Made with &#x2665; by <a href="https://www.instagram.com/anubrr_21/" id="joking" target="_blank">Anubrata.</a>
+    </footer>
 
     <script src="app.js"></script>
   </body>
