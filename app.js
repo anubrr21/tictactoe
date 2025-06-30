@@ -14,6 +14,9 @@ const playerODisplay = document.querySelector("#playerO-name");
 const playerXScore = document.querySelector(".player-x-score .score");
 const playerOScore = document.querySelector(".player-o-score .score");
 const themeToggle = document.querySelector("#theme-toggle");
+const pvpBtn = document.querySelector("#pvp-btn");
+const pvcBtn = document.querySelector("#pvc-btn");
+const endGameBtn = document.querySelector("#end-game-btn");
 
 // Sound effects
 const winSound = document.getElementById("win-sound");
@@ -22,8 +25,9 @@ const clickSound = document.getElementById("click-sound");
 
 let turnO = true;
 let count = 0;
-let scores = { X: 0, O: 0 };
+let scores = { playerX: 0, playerO: 0, computer: 0 };
 let gameActive = false;
+let gameMode = "pvp";
 
 const winPatterns = [
   [0, 1, 2],
@@ -46,11 +50,36 @@ themeToggle.addEventListener("click", () => {
   }
 });
 
+// Game mode selection
+pvpBtn.addEventListener("click", () => {
+  clickSound.play();
+  gameMode = "pvp";
+  pvpBtn.classList.add("active");
+  pvcBtn.classList.remove("active");
+  playerOName.disabled = false;
+  playerOName.placeholder = "Player O Name";
+  playerOName.value = "";
+  resetScores();
+});
+
+pvcBtn.addEventListener("click", () => {
+  clickSound.play();
+  gameMode = "pvc";
+  pvcBtn.classList.add("active");
+  pvpBtn.classList.remove("active");
+  playerOName.disabled = true;
+  playerOName.value = "Computer";
+  playerOName.placeholder = "Computer";
+  resetScores();
+});
+
 // Initialize game
 startBtn.addEventListener("click", () => {
   clickSound.play();
   const xName = playerXName.value.trim() || "Player X";
-  const oName = playerOName.value.trim() || "Player O";
+  const oName = gameMode === "pvp" 
+    ? (playerOName.value.trim() || "Player O") 
+    : "Computer";
   
   playerXDisplay.textContent = xName;
   playerODisplay.textContent = oName;
@@ -59,9 +88,27 @@ startBtn.addEventListener("click", () => {
   gameContainer.classList.remove("hide");
   gameActive = true;
   
-  // Highlight first player
-  updateCurrentPlayerIndicator();
+  resetGame();
+  
+  // If PVC mode and computer goes first
+  if (gameMode === "pvc" && !turnO) {
+    setTimeout(makeComputerMove, 500);
+  }
 });
+
+// End game button
+endGameBtn.addEventListener("click", () => {
+  clickSound.play();
+  gameContainer.classList.add("hide");
+  playerInput.classList.remove("hide");
+  resetGame();
+});
+
+const resetScores = () => {
+  scores = { playerX: 0, playerO: 0, computer: 0 };
+  playerXScore.textContent = "0";
+  playerOScore.textContent = "0";
+};
 
 const resetGame = () => {
   turnO = true;
@@ -72,10 +119,11 @@ const resetGame = () => {
   drawMsg.classList.add("hide");
   updateCurrentPlayerIndicator();
   
-  // Reset box colors and animations
   boxes.forEach(box => {
     box.style.backgroundColor = "";
     box.classList.remove("x", "o", "winning-box");
+    box.disabled = false;
+    box.innerText = "";
   });
 };
 
@@ -91,39 +139,140 @@ const updateCurrentPlayerIndicator = () => {
   }
 };
 
+const makeComputerMove = () => {
+  if (!gameActive || gameMode !== "pvc" || turnO) return;
+  
+  const emptyBoxes = Array.from(boxes).filter(box => box.innerText === "");
+  if (emptyBoxes.length === 0) return;
+
+  const board = Array.from(boxes).map(box => box.innerText);
+  
+  // 1. Check for winning move
+  for (let i = 0; i < board.length; i++) {
+    if (board[i] === "") {
+      board[i] = "X";
+      if (checkWin(board, "X")) {
+        simulateComputerClick(i);
+        return;
+      }
+      board[i] = "";
+    }
+  }
+  
+  // 2. Check for blocking move
+  for (let i = 0; i < board.length; i++) {
+    if (board[i] === "") {
+      board[i] = "O";
+      if (checkWin(board, "O")) {
+        simulateComputerClick(i);
+        return;
+      }
+      board[i] = "";
+    }
+  }
+  
+  // 3. Take center if available
+  if (board[4] === "") {
+    simulateComputerClick(4);
+    return;
+  }
+  
+  // 4. Take a corner if available
+  const corners = [0, 2, 6, 8];
+  const emptyCorners = corners.filter(i => board[i] === "");
+  if (emptyCorners.length > 0) {
+    const randomCorner = emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
+    simulateComputerClick(randomCorner);
+    return;
+  }
+  
+  // 5. Take any available edge
+  const edges = [1, 3, 5, 7];
+  const emptyEdges = edges.filter(i => board[i] === "");
+  if (emptyEdges.length > 0) {
+    const randomEdge = emptyEdges[Math.floor(Math.random() * emptyEdges.length)];
+    simulateComputerClick(randomEdge);
+    return;
+  }
+};
+
+const simulateComputerClick = (index) => {
+  const box = boxes[index];
+  clickSound.play();
+  
+  box.innerText = "X";
+  box.classList.add("x");
+  box.disabled = true;
+  count++;
+  
+  box.classList.add("animate__animated", "animate__rubberBand");
+  box.addEventListener("animationend", () => {
+    box.classList.remove("animate__animated", "animate__rubberBand");
+  });
+  
+  const board = Array.from(boxes).map(box => box.innerText);
+  
+  if (checkWin(board, "X")) {
+    showWinner("X");
+    return;
+  } else if (count === 9) {
+    gameDraw();
+    return;
+  }
+  
+  turnO = true;
+  updateCurrentPlayerIndicator();
+};
+
 boxes.forEach((box) => {
   box.addEventListener("click", () => {
-    if (!gameActive) return;
+    if (!gameActive || (gameMode === "pvc" && !turnO)) return;
     
     clickSound.play();
     
-    if (turnO) {
-      box.innerText = "O";
-      box.classList.add("o");
-      turnO = false;
-    } else {
-      box.innerText = "X";
-      box.classList.add("x");
-      turnO = true;
-    }
+    box.innerText = turnO ? "O" : "X";
+    box.classList.add(turnO ? "o" : "x");
     box.disabled = true;
     count++;
     
-    // Add animation class
     box.classList.add("animate__animated", "animate__rubberBand");
     box.addEventListener("animationend", () => {
       box.classList.remove("animate__animated", "animate__rubberBand");
     });
     
+    const currentPlayer = turnO ? "O" : "X";
+    const board = Array.from(boxes).map(box => box.innerText);
+    
+    if (checkWin(board, currentPlayer)) {
+      showWinner(currentPlayer);
+      return;
+    } else if (count === 9) {
+      gameDraw();
+      return;
+    }
+    
+    turnO = !turnO;
     updateCurrentPlayerIndicator();
     
-    let isWinner = checkWinner();
-    
-    if (count === 9 && !isWinner) {
-      gameDraw();
+    if (gameMode === "pvc" && !turnO) {
+      setTimeout(makeComputerMove, 500);
     }
   });
 });
+
+const checkWin = (board, player) => {
+  for (let pattern of winPatterns) {
+    const [a, b, c] = pattern;
+    if (board[a] === player && board[b] === player && board[c] === player) {
+      for (let i of pattern) {
+        boxes[i].classList.add("winning-box");
+        boxes[i].style.backgroundColor = player === "X" ? "#ede9fe" : "#ecfdf5";
+      }
+      return true;
+    }
+  }
+  return false;
+};
 
 const gameDraw = () => {
   drawSound.play();
@@ -133,66 +282,56 @@ const gameDraw = () => {
 };
 
 const disableBoxes = () => {
-  for (let box of boxes) {
+  gameActive = false;
+  boxes.forEach(box => {
     box.disabled = true;
-  }
+  });
 };
 
 const enableBoxes = () => {
-  for (let box of boxes) {
+  gameActive = true;
+  boxes.forEach(box => {
     box.disabled = false;
-    box.innerText = "";
-    box.classList.remove("x", "o", "winning-box");
-  }
+  });
 };
 
 const showWinner = (winner) => {
   winSound.play();
-  const winnerName = winner === "X" ? playerXDisplay.textContent : playerODisplay.textContent;
+  
+  let winnerName;
+  if (gameMode === "pvp") {
+    winnerName = winner === "X" ? playerXDisplay.textContent : playerODisplay.textContent;
+    scores[winner === "X" ? "playerX" : "playerO"]++;
+    playerXScore.textContent = scores.playerX;
+    playerOScore.textContent = scores.playerO;
+  } else {
+    if (winner === "X") {
+      winnerName = "Computer";
+      scores.computer++;
+      playerOScore.textContent = scores.computer;
+    } else {
+      winnerName = playerXDisplay.textContent;
+      scores.playerX++;
+      playerXScore.textContent = scores.playerX;
+    }
+  }
+  
   msg.innerHTML = `🎉 <span class="winner">${winnerName}</span> wins! 🎉`;
   msg.classList.add("winner-animation");
   msgContainer.classList.remove("hide");
   disableBoxes();
-  
-  // Update scores
-  scores[winner]++;
-  if (winner === "X") {
-    playerXScore.textContent = scores.X;
-  } else {
-    playerOScore.textContent = scores.O;
-  }
-};
-
-const checkWinner = () => {
-  for (let pattern of winPatterns) {
-    let pos1Val = boxes[pattern[0]].innerText;
-    let pos2Val = boxes[pattern[1]].innerText;
-    let pos3Val = boxes[pattern[2]].innerText;
-    
-    if (pos1Val != "" && pos2Val != "" && pos3Val != "") {
-      if (pos1Val === pos2Val && pos2Val === pos3Val) {
-        // Highlight winning boxes
-        for (let i of pattern) {
-          boxes[i].classList.add("winning-box");
-          boxes[i].style.backgroundColor = pos1Val === "X" ? "#ede9fe" : "#ecfdf5";
-        }
-        
-        showWinner(pos1Val);
-        return true;
-      }
-    }
-  }
 };
 
 newGameBtn.addEventListener("click", () => {
   clickSound.play();
   resetGame();
+  if (gameMode === "pvc" && !turnO) {
+    setTimeout(makeComputerMove, 500);
+  }
 });
 
 resetBtn.addEventListener("click", () => {
   clickSound.play();
-  scores = { X: 0, O: 0 };
-  playerXScore.textContent = "0";
-  playerOScore.textContent = "0";
+  resetScores();
   resetGame();
 });
