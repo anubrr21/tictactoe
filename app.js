@@ -17,18 +17,6 @@ const themeToggle = document.querySelector("#theme-toggle");
 const pvpBtn = document.querySelector("#pvp-btn");
 const pvcBtn = document.querySelector("#pvc-btn");
 const endGameBtn = document.querySelector("#end-game-btn");
-box.addEventListener("click", () => {
-  gtag('event', 'box_click', {
-    'event_category': 'Game',
-    'event_label': 'Box Clicked',
-    'value': 1
-  });
-});
-gtag('event', 'game_started');
-gtag('event', 'new_game_clicked');
-gtag('event', 'winner_declared', {
-  'event_label': winner // X or O
-});
 
 
 
