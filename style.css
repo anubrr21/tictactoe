@@ -1,0 +1,342 @@
+:root {
+  --bg-color: #0f172a;
+  --text-color: #f8fafc;
+  --box-color: #1e293b;
+  --x-color: #a78bfa;
+  --o-color: #34d399;
+  --accent-color: #a78bfa;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --scoreboard-bg: #1e293b;
+}
+
+.light-mode {
+  --bg-color: #f8fafc;
+  --text-color: #0f172a;
+  --box-color: #f1f5f9;
+  --x-color: #7c3aed;
+  --o-color: #10b981;
+  --accent-color: #7c3aed;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --scoreboard-bg: #e2e8f0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.theme-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: var(--accent-color);
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  text-shadow: 0 0 10px var(--shadow-color);
+}
+
+.player-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: var(--scoreboard-bg);
+  border-radius: 1rem;
+  box-shadow: 0 0 20px var(--shadow-color);
+  max-width: 500px;
+  width: 90%;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.input-group input {
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1rem;
+  background-color: var(--box-color);
+  color: var(--text-color);
+}
+
+.input-group input::placeholder {
+  color: #94a3b8;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+#start-btn, #reset-btn, #new-btn {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  background-color: var(--accent-color);
+  color: #fff;
+  border-radius: 0.5rem;
+  border: none;
+  margin-top: 1rem;
+}
+
+.game-container {
+  width: 100%;
+  max-width: 800px;
+}
+
+.container {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game {
+  height: 60vmin;
+  width: 60vmin;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5vmin;
+}
+
+.box {
+  height: 18vmin;
+  width: 18vmin;
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 0 1rem var(--shadow-color);
+  font-size: 8vmin;
+  font-weight: 700;
+  background-color: var(--box-color);
+  transition: all 0.2s ease;
+}
+
+.box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 1.5rem var(--shadow-color);
+}
+
+.box.x {
+  color: var(--x-color);
+}
+
+.box.o {
+  color: var(--o-color);
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+  background-color: var(--scoreboard-bg);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.player-x-score, .player-o-score {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.player-x-score {
+  color: var(--x-color);
+}
+
+.player-o-score {
+  color: var(--o-color);
+}
+
+#msg {
+  color: var(--text-color);
+  font-size: 5vmin;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px var(--shadow-color);
+}
+
+.msg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  z-index: 100;
+}
+
+#draw-msg {
+  text-align: center;
+}
+
+#draw-msg p {
+  font-size: 5vmin;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+}
+
+.hide {
+  display: none;
+}
+
+/* Animations */
+.winner-animation {
+  animation: celebrate 0.5s ease infinite, float 3s ease-in-out infinite;
+}
+
+@keyframes celebrate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+.current-player {
+  position: relative;
+}
+
+.current-player::after {
+  content: "•";
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fbbf24;
+  font-size: 1.5rem;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Confetti animation for draw */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #fbbf24;
+  opacity: 0;
+}
+
+.confetti:nth-child(1) {
+  left: 20%;
+  animation: confetti 3s ease 0.5s infinite;
+}
+.confetti:nth-child(2) {
+  left: 40%;
+  animation: confetti 3s ease 1s infinite;
+}
+.confetti:nth-child(3) {
+  left: 60%;
+  animation: confetti 3s ease 1.5s infinite;
+}
+.confetti:nth-child(4) {
+  left: 80%;
+  animation: confetti 3s ease 0.8s infinite;
+}
+.confetti:nth-child(5) {
+  left: 30%;
+  animation: confetti 3s ease 1.2s infinite;
+}
+
+@keyframes confetti {
+  0% { 
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+    top: -10px;
+  }
+  100% { 
+    transform: translateY(500px) rotate(360deg);
+    opacity: 0;
+    top: 100%;
+  }
+}
+
+/* Box entry animation */
+.box {
+  animation: boxEntry 0.5s ease-out backwards;
+}
+
+@keyframes boxEntry {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Winning box animation */
+.winning-box {
+  animation: heartBeat 1s ease infinite;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+#joking{
+    text-decoration: none;
+    color: aliceblue;
+}
+footer{
+    height:25px;
+     margin-top:10rem;
+  text-align:center;
+  background-color:#b67fc2;
+  color:aliceblue;
+  transition: all;
+  color:rgb(236, 228, 228);
+  transition-timing-function: linear;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}

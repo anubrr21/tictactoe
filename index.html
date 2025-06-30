@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe Game</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  </head>
+  <body class="dark-mode">
+    <button id="theme-toggle" class="theme-btn">☀️ Light Mode</button>
+    
+    <div class="player-input animate__animated animate__fadeIn">
+      <h1>Tic Tac Toe</h1>
+      <div class="input-group">
+        <input type="text" id="playerX" placeholder="Player X Name">
+        <input type="text" id="playerO" placeholder="Player O Name">
+      </div>
+      <button id="start-btn" class="animate__animated animate__pulse animate__infinite">Start Game</button>
+    </div>
+
+    <div class="game-container hide">
+      <div class="scoreboard">
+        <div class="player-x-score">
+          <span id="playerX-name">Player X</span>: <span class="score">0</span>
+        </div>
+        <div class="player-o-score">
+          <span id="playerO-name">Player O</span>: <span class="score">0</span>
+        </div>
+      </div>
+      
+      <div class="msg-container hide">
+        <p id="msg"></p>
+        <div id="draw-msg" class="hide">
+          <p>It's a draw!</p>
+          <div class="confetti"></div>
+          <div class="confetti"></div>
+          <div class="confetti"></div>
+          <div class="confetti"></div>
+          <div class="confetti"></div>
+        </div>
+        <button id="new-btn">New Game</button>
+      </div>
+      
+      <main>
+        <div class="container">
+          <div class="game">
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+          </div>
+        </div>
+        <button id="reset-btn">Reset Scores</button>
+      </main>
+    </div>
+
+    <audio id="win-sound" src="audio/win.wav" preload="auto"></audio>
+    <audio id="draw-sound" src="audio/draw.wav" preload="auto"></audio>
+<audio id="click-sound" src="audio/click.wav" preload="auto"></audio>
+    
+    <footer>
+             Made with &#x2665; by <a href="https://www.instagram.com/anubrr_21/" id="joking" target=_blank > Anubrata.</a>
+        </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
